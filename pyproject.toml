@@ -1,0 +1,13 @@
+[project]
+name = "property-management"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "alembic>=1.17.1",
+    "dependency-injector>=4.48.2",
+    "fastapi[standard]>=0.120.1",
+    "pydantic-settings>=2.11.0",
+    "sqlalchemy[asyncio]>=2.0.44",
+]
