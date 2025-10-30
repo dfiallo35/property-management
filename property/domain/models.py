@@ -3,6 +3,8 @@ from pydantic import BaseModel, ConfigDict
 
 
 class BaseEntity(BaseModel):
+    id: UUID
+
     model_config = ConfigDict(
         json_encoders={
             UUID: str,
@@ -12,15 +14,19 @@ class BaseEntity(BaseModel):
 
 class Location(BaseEntity):
     address: str
-    latitude: float = None
-    longitude: float = None
+    latitude: float | None = None
+    longitude: float | None = None
 
 
 class Property(BaseEntity):
-    id: UUID
-    property_type: str  # TODO: Why emum config via settings?
+    property_type: str
     room_count: int
     bathroom_count: int
-    additional_features: list[str]  # TODO: Why emum config via settings?
+    additional_features: list[str]
     location: Location
     rent_value: float
+
+
+class Configuration(BaseEntity):
+    key: str
+    value: list[str]
