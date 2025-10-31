@@ -3,12 +3,15 @@ from fastapi import status
 from fastapi import Depends
 from uuid import UUID
 
+from dependency_injector.wiring import inject
+from dependency_injector.wiring import Provide
+
+from property.settings import Container
 from property.application.dtos import PropertyOutput
 from property.application.dtos import PropertyCreateRequest
 from property.application.dtos import PropertyUpdateRequest
 from property.application.exceptions import ExceptionResponse
 from property.application.services import PropertyService
-from property.application.services import get_property_service
 from property.domain.filters import PropertyFilter
 
 
@@ -23,9 +26,10 @@ router = APIRouter(prefix="/api/properties", tags=["Properties"])
     },
     status_code=status.HTTP_201_CREATED,
 )
+@inject
 async def create_property(
     create_request: PropertyCreateRequest,
-    service: PropertyService = Depends(get_property_service),
+    service: PropertyService = Depends(Provide[Container.property_service]),
 ):
     return await service.create_property(create_request)
 
@@ -38,9 +42,10 @@ async def create_property(
     },
     status_code=status.HTTP_200_OK,
 )
+@inject
 async def list_properties(
     filters: PropertyFilter = Depends(),
-    service: PropertyService = Depends(get_property_service),
+    service: PropertyService = Depends(Provide[Container.property_service]),
 ):
     return await service.list_properties(filters)
 
@@ -53,9 +58,10 @@ async def list_properties(
     },
     status_code=status.HTTP_200_OK,
 )
+@inject
 async def get_property(
     property_id: UUID,
-    service: PropertyService = Depends(get_property_service),
+    service: PropertyService = Depends(Provide[Container.property_service]),
 ):
     return await service.get_property_by_id(property_id)
 
@@ -68,10 +74,11 @@ async def get_property(
     },
     status_code=status.HTTP_200_OK,
 )
+@inject
 async def update_property(
     property_id: UUID,
     update_request: PropertyUpdateRequest,
-    service: PropertyService = Depends(get_property_service),
+    service: PropertyService = Depends(Provide[Container.property_service]),
 ):
     return await service.update_property(property_id, update_request)
 
@@ -84,8 +91,9 @@ async def update_property(
     },
     status_code=status.HTTP_204_NO_CONTENT,
 )
+@inject
 async def delete_property(
     property_id: UUID,
-    service: PropertyService = Depends(get_property_service),
+    service: PropertyService = Depends(Provide[Container.property_service]),
 ):
     return await service.delete_property(property_id)

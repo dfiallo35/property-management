@@ -1,8 +1,5 @@
 from uuid import UUID
-from dependency_injector.wiring import inject
-from dependency_injector.wiring import Provide
 
-from property.settings import Container
 from property.application.dtos import ConfigurationCreateRequest
 from property.application.dtos import PropertyCreateRequest
 from property.application.dtos import ConfigurationUpdateRequest
@@ -19,12 +16,9 @@ from property.domain.interfaces import IPropertyRepository
 
 
 class PropertyService:
-    @inject
     def __init__(
         self,
-        property_repository: IPropertyRepository = Provide[
-            Container.property_repository
-        ],
+        property_repository: IPropertyRepository,
     ):
         self.property_repository = property_repository
         self.mapper = PropertyMapper()
@@ -64,12 +58,9 @@ class PropertyService:
 
 
 class ConfigurationService:
-    @inject
     def __init__(
         self,
-        configuration_repository: IConfigurationRepository = Provide[
-            Container.configuration_repository
-        ],
+        configuration_repository: IConfigurationRepository,
     ):
         self.configuration_repository = configuration_repository
         self.mapper = ConfigurationMapper()
