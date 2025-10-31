@@ -13,7 +13,7 @@ from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import Mapped
 
 
-class BaseModel(DeclarativeBase):
+class BaseTable(DeclarativeBase):
     __abstract__ = True
 
     id: Mapped[UUID] = mapped_column(
@@ -30,7 +30,7 @@ class BaseModel(DeclarativeBase):
     )
 
 
-class Property(BaseModel):
+class PropertyTable(BaseTable):
     __tablename__ = "property"
 
     room_count: Mapped[int] = mapped_column(Integer, nullable=False)
@@ -44,7 +44,7 @@ class Property(BaseModel):
     additional_features: Mapped[list[str]] = mapped_column(JSON, default=list)
 
 
-class Configuration(BaseModel):
+class ConfigurationTable(BaseTable):
     __tablename__ = "configuration"
 
     key: Mapped[str] = mapped_column(String, nullable=False)

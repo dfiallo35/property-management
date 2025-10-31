@@ -1,9 +1,12 @@
 from uuid import UUID
+from datetime import datetime
 from pydantic import BaseModel, ConfigDict
 
 
 class BaseEntity(BaseModel):
-    id: UUID
+    id: UUID | None = None
+    created_at: datetime | None = None
+    updated_at: datetime | None = None
 
     model_config = ConfigDict(
         json_encoders={
@@ -12,7 +15,7 @@ class BaseEntity(BaseModel):
     )
 
 
-class Location(BaseEntity):
+class Location(BaseModel):
     address: str
     latitude: float | None = None
     longitude: float | None = None
