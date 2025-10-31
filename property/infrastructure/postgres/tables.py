@@ -52,4 +52,5 @@ class ConfigurationTable(BaseTable):
     __tablename__ = "configuration"
 
     key: Mapped[str] = mapped_column(String, nullable=False)
-    value: Mapped[list[str]] = mapped_column(JSON, nullable=False)
+    type: Mapped[str] = mapped_column(String, nullable=False)
+    value: Mapped[list[str]] = mapped_column(JSON, nullable=True)

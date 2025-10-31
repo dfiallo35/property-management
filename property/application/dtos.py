@@ -1,5 +1,7 @@
 from pydantic import BaseModel
 
+from property.domain.enums import ConfigurationType
+
 
 class BaseCreateRequest(BaseModel):
     pass
@@ -56,14 +58,17 @@ class PropertyOutput(BaseOutput):
 class ConfigurationOutput(BaseOutput):
     id: str
     key: str
-    value: list[str]
+    type: ConfigurationType
+    value: list[str] | None = None
 
 
 class ConfigurationCreateRequest(BaseCreateRequest):
     key: str
-    value: list[str]
+    type: ConfigurationType
+    value: list[str] | None = None
 
 
 class ConfigurationUpdateRequest(BaseUpdateRequest):
     key: str | None = None
+    type: ConfigurationType | None = None
     value: list[str] | None = None

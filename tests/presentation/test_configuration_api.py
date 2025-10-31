@@ -4,17 +4,32 @@ from fastapi import status
 from uuid import uuid4
 from httpx import AsyncClient
 
+from property.domain.enums import ConfigurationType
+
 
 class TestConfigurationCreate:
     url = "/api/properties/settings/"
 
     @pytest.mark.asyncio
-    async def test_create_configuration_success(self, async_client: AsyncClient):
+    async def test_create_configuration_select_success(self, async_client: AsyncClient):
         response = await async_client.post(
             self.url,
             json={
                 "key": "test",
+                "type": ConfigurationType.SELECT.value,
                 "value": ["test1", "test2"],
+            },
+        )
+
+        assert response.status_code == status.HTTP_201_CREATED
+
+    @pytest.mark.asyncio
+    async def test_create_configuration_number_success(self, async_client: AsyncClient):
+        response = await async_client.post(
+            self.url,
+            json={
+                "key": "test",
+                "type": ConfigurationType.NUMBER.value,
             },
         )
 
@@ -83,6 +98,34 @@ class TestConfigurationUpdate:
         )
 
         assert response.status_code == status.HTTP_404_NOT_FOUND
+
+    @pytest.mark.asyncio
+    async def test_update_configuration_not_valid_type(
+        self, async_client: AsyncClient, create_configuration
+    ):
+        response = await async_client.put(
+            self.url.format(configuration_id=create_configuration.id),
+            json={
+                "key": "test2",
+                "type": "test",
+            },
+        )
+
+        assert response.status_code == status.HTTP_422_UNPROCESSABLE_CONTENT
+
+    @pytest.mark.asyncio
+    async def test_update_configuration_not_valid(
+        self, async_client: AsyncClient, create_configuration
+    ):
+        response = await async_client.put(
+            self.url.format(configuration_id=create_configuration.id),
+            json={
+                "key": "test2",
+                "type": ConfigurationType.NUMBER.value,
+            },
+        )
+
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
 
 
 class TestConfigurationDelete:

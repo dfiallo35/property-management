@@ -54,6 +54,7 @@ class ConfigurationMapper(BaseMapper):
         return ConfigurationTable(
             id=entity.id,
             key=entity.key,
+            type=entity.type,
             value=entity.value,
         )
 
@@ -61,5 +62,6 @@ class ConfigurationMapper(BaseMapper):
         return Configuration(
             id=entity.id,
             key=entity.key,
+            type=entity.type,
             value=entity.value,
         )

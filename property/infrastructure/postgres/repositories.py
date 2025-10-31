@@ -68,14 +68,14 @@ class BaseRepositoryPostgres(IBaseRepository):
         except Exception as e:
             raise e
 
-    async def update(self, entity: BaseEntity, update_request: dict) -> BaseEntity:
+    async def update(self, entity: BaseEntity) -> BaseEntity:
         try:
             async with self.db_connection.get_session() as session:
                 model = await session.get(self.table_class, entity.id)
                 if not model:
                     raise ValueError(f"Record with id {entity.id} not found")
 
-                for key, value in update_request.items():
+                for key, value in entity.model_dump(exclude_unset=True).items():
                     setattr(model, key, value)
                 await session.commit()
                 await session.refresh(model)

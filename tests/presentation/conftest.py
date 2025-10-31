@@ -4,6 +4,7 @@ from httpx import ASGITransport
 from httpx import AsyncClient
 from factory.alchemy import SQLAlchemyModelFactory
 
+from property.domain.enums import ConfigurationType
 from property.infrastructure.postgres.tables import BaseTable
 from property.infrastructure.postgres.database import DbConnection
 from property.infrastructure.postgres.tables import ConfigurationTable
@@ -89,6 +90,7 @@ async def create_configuration(db_connection):
         configuration = await ConfigurationFactory.create_async(
             id=uuid4(),
             key="test",
+            type=ConfigurationType.SELECT.value,
             value=["test1", "test2"],
         )
         yield configuration

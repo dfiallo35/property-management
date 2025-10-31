@@ -5,7 +5,7 @@ from fastapi.responses import JSONResponse
 from property.presentation.routes import router
 from property.settings import create_container
 from property.application.exceptions import ExceptionResponse
-from property.application.exceptions import BaseException
+from property.domain.exceptions import BaseException
 
 
 app = FastAPI(title="Property Management API")

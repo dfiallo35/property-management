@@ -2,6 +2,9 @@ from uuid import UUID
 from datetime import datetime
 from pydantic import BaseModel, ConfigDict
 
+from property.domain.exceptions import ConfigurationNotValidError
+from property.domain.enums import ConfigurationType
+
 
 class BaseEntity(BaseModel):
     id: UUID | None = None
@@ -32,4 +35,10 @@ class Property(BaseEntity):
 
 class Configuration(BaseEntity):
     key: str
-    value: list[str]
+    type: ConfigurationType
+    value: list[str] | None = None
+
+    def is_valid_configuration(self):
+        if self.type != ConfigurationType.SELECT and self.value is not None:
+            raise ConfigurationNotValidError(key=self.key, type=self.type)
+        return True

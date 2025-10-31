@@ -6,7 +6,7 @@ from property.application.dtos import ConfigurationUpdateRequest
 from property.application.dtos import PropertyUpdateRequest
 from property.application.dtos import ConfigurationOutput
 from property.application.dtos import PropertyOutput
-from property.application.exceptions import PropertyNotFoundError
+from property.domain.exceptions import PropertyNotFoundError
 from property.application.mappers import ConfigurationMapper
 from property.application.mappers import PropertyMapper
 from property.domain.filters import ConfigurationFilter
@@ -45,9 +45,8 @@ class PropertyService:
         entity = await self.get_property_by_id(id)
         if not entity:
             raise PropertyNotFoundError(id)
-        entity = await self.property_repository.update(
-            entity, update_request.model_dump(exclude_unset=True)
-        )
+        updated_entity = self.mapper.to_update(entity, update_request)
+        entity = await self.property_repository.update(updated_entity)
         return self.mapper.to_api(entity)
 
     async def delete_property(self, id: UUID):
@@ -69,6 +68,7 @@ class ConfigurationService:
         self, create_request: ConfigurationCreateRequest
     ) -> ConfigurationOutput:
         entity = self.mapper.to_domain(create_request)
+        entity.is_valid_configuration()
         created_entity = await self.configuration_repository.create(entity)
         return self.mapper.to_api(created_entity)
 
@@ -89,9 +89,9 @@ class ConfigurationService:
         entity = await self.get_configuration_by_id(id)
         if not entity:
             raise PropertyNotFoundError(id)
-        entity = await self.configuration_repository.update(
-            entity, update_request.model_dump(exclude_unset=True)
-        )
+        updated_entity = self.mapper.to_update(entity, update_request)
+        updated_entity.is_valid_configuration()
+        entity = await self.configuration_repository.update(updated_entity)
         return self.mapper.to_api(entity)
 
     async def delete_configuration(self, id: UUID):
@@ -99,11 +99,3 @@ class ConfigurationService:
         if not entity:
             raise PropertyNotFoundError(id)
         return await self.configuration_repository.delete(entity)
-
-
-def get_property_service():
-    return PropertyService()
-
-
-def get_configuration_service():
-    return ConfigurationService()
