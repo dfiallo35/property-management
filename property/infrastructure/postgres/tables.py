@@ -1,8 +1,10 @@
 from uuid import uuid4
 from datetime import datetime
+from decimal import Decimal
 
 from sqlalchemy import DateTime
 from sqlalchemy import Float
+from sqlalchemy import DECIMAL
 from sqlalchemy import Integer
 from sqlalchemy import String
 from sqlalchemy import func
@@ -38,7 +40,9 @@ class PropertyTable(BaseTable):
     location_address: Mapped[str] = mapped_column(String, nullable=False)
     location_latitude: Mapped[float] = mapped_column(Float, nullable=True)
     location_longitude: Mapped[float] = mapped_column(Float, nullable=True)
-    rent_value: Mapped[Float] = mapped_column(Float, nullable=False)
+    rent_value: Mapped[Decimal] = mapped_column(
+        DECIMAL(precision=10, scale=2), nullable=False
+    )
 
     property_type: Mapped[str] = mapped_column(String, nullable=False)
     additional_features: Mapped[list[str]] = mapped_column(JSON, default=list)
