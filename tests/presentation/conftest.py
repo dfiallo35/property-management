@@ -74,7 +74,7 @@ async def create_property(db_connection):
             property_type="test",
             room_count=1,
             bathroom_count=1,
-            additional_features=["feature1", "feature2"],
+            additional_features={"feature1": 1, "feature2": 2},
             location_address="test",
             location_latitude=1.0,
             location_longitude=1.0,

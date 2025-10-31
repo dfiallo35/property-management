@@ -24,3 +24,5 @@ class PropertyFilter(BaseFilter):
 
 class ConfigurationFilter(BaseFilter):
     id_eq: UUID | None = None
+    key_eq: str | None = None
+    key_in: list[str] | None = None

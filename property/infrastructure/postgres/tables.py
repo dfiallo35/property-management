@@ -45,12 +45,12 @@ class PropertyTable(BaseTable):
     )
 
     property_type: Mapped[str] = mapped_column(String, nullable=False)
-    additional_features: Mapped[list[str]] = mapped_column(JSON, default=list)
+    additional_features: Mapped[dict] = mapped_column(JSON, default=list)
 
 
 class ConfigurationTable(BaseTable):
     __tablename__ = "configuration"
 
-    key: Mapped[str] = mapped_column(String, nullable=False)
+    key: Mapped[str] = mapped_column(String, nullable=False, unique=True)
     type: Mapped[str] = mapped_column(String, nullable=False)
     value: Mapped[list[str]] = mapped_column(JSON, nullable=True)

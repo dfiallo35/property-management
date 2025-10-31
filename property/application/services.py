@@ -19,14 +19,26 @@ class PropertyService:
     def __init__(
         self,
         property_repository: IPropertyRepository,
+        configuration_repository: IConfigurationRepository,
     ):
         self.property_repository = property_repository
+        self.configuration_repository = configuration_repository
         self.mapper = PropertyMapper()
 
     async def create_property(
         self, create_request: PropertyCreateRequest
     ) -> PropertyOutput:
         entity = self.mapper.to_domain(create_request)
+
+        property_type_config = await self.configuration_repository.list(
+            ConfigurationFilter(key_eq=create_request.property_type)
+        )
+        entity.is_valid_property_type(property_type_config)
+        additional_features_config = await self.configuration_repository.list(
+            ConfigurationFilter(key_in=list(entity.additional_features.keys()))
+        )
+        entity.is_valid_additional_features(additional_features_config)
+
         created_entity = await self.property_repository.create(entity)
         return self.mapper.to_api(created_entity)
 
@@ -46,6 +58,18 @@ class PropertyService:
         if not entity:
             raise PropertyNotFoundError(id)
         updated_entity = self.mapper.to_update(entity, update_request)
+
+        if update_request.property_type:
+            property_type_config = await self.configuration_repository.list(
+                ConfigurationFilter(key_eq=update_request.property_type)
+            )
+            updated_entity.is_valid_property_type(property_type_config)
+        if update_request.additional_features:
+            additional_features_config = await self.configuration_repository.list(
+                ConfigurationFilter(key_in=list(entity.additional_features.keys()))
+            )
+            entity.is_valid_additional_features(additional_features_config)
+
         entity = await self.property_repository.update(updated_entity)
         return self.mapper.to_api(entity)
 

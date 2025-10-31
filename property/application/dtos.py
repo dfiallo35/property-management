@@ -25,7 +25,7 @@ class PropertyCreateRequest(BaseCreateRequest):
     property_type: str
     room_count: int
     bathroom_count: int
-    additional_features: list[str]
+    additional_features: dict
     location: LocationCreateRequest
     rent_value: float
 
@@ -34,7 +34,7 @@ class PropertyUpdateRequest(BaseUpdateRequest):
     property_type: str | None = None
     room_count: int | None = None
     bathroom_count: int | None = None
-    additional_features: list[str] | None = None
+    additional_features: dict | None = None
     location: LocationCreateRequest | None = None
     rent_value: float | None = None
 
@@ -50,7 +50,7 @@ class PropertyOutput(BaseOutput):
     property_type: str
     room_count: int
     bathroom_count: int
-    additional_features: list[str]
+    additional_features: dict
     location: LocationOutput
     rent_value: float
 

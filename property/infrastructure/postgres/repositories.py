@@ -103,4 +103,8 @@ class ConfigurationRepositoryPostgres(IConfigurationRepository, BaseRepositoryPo
         query = await super().filter(filters, query)
         if filters.id_eq is not None:
             query = query.where(self.table_class.id == filters.id_eq)
+        if filters.key_eq is not None:
+            query = query.where(self.table_class.key == filters.key_eq)
+        if filters.key_in is not None:
+            query = query.where(self.table_class.key.in_(filters.key_in))
         return query

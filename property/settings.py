@@ -39,6 +39,7 @@ class Container(DeclarativeContainer):
     property_service = providers.Singleton(
         PropertyService,
         property_repository=property_repository,
+        configuration_repository=configuration_repository,
     )
 
     configuration_service = providers.Singleton(
