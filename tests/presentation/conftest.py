@@ -6,6 +6,7 @@ from factory.alchemy import SQLAlchemyModelFactory
 
 from property.infrastructure.postgres.tables import BaseTable
 from property.infrastructure.postgres.database import DbConnection
+from property.infrastructure.postgres.tables import ConfigurationTable
 from property.infrastructure.postgres.tables import PropertyTable
 
 from main import app
@@ -58,6 +59,11 @@ class PropertyFactory(AsyncBaseFactory):
         model = PropertyTable
 
 
+class ConfigurationFactory(AsyncBaseFactory):
+    class Meta:
+        model = ConfigurationTable
+
+
 @pytest_asyncio.fixture
 async def create_property(db_connection):
     async with db_connection.get_session() as session:
@@ -74,3 +80,15 @@ async def create_property(db_connection):
             rent_value=1.0,
         )
         yield property
+
+
+@pytest_asyncio.fixture
+async def create_configuration(db_connection):
+    async with db_connection.get_session() as session:
+        ConfigurationFactory._meta.sqlalchemy_session = session
+        configuration = await ConfigurationFactory.create_async(
+            id=uuid4(),
+            key="test",
+            value=["test1", "test2"],
+        )
+        yield configuration

@@ -20,3 +20,7 @@ class BaseFilter(BaseModel):
 
 class PropertyFilter(BaseFilter):
     id_eq: UUID | None = None
+
+
+class ConfigurationFilter(BaseFilter):
+    id_eq: UUID | None = None

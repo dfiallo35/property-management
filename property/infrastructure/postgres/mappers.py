@@ -1,9 +1,11 @@
 from abc import ABC, abstractmethod
 
 from property.domain.models import BaseEntity
+from property.domain.models import Configuration
 from property.domain.models import Property
 from property.domain.models import Location
 from property.infrastructure.postgres.tables import BaseTable
+from property.infrastructure.postgres.tables import ConfigurationTable
 from property.infrastructure.postgres.tables import PropertyTable
 
 
@@ -44,4 +46,20 @@ class PropertyMapper(BaseMapper):
             rent_value=entity.rent_value,
             property_type=entity.property_type,
             additional_features=entity.additional_features,
+        )
+
+
+class ConfigurationMapper(BaseMapper):
+    def to_table(self, entity: Configuration) -> ConfigurationTable:
+        return ConfigurationTable(
+            id=entity.id,
+            key=entity.key,
+            value=entity.value,
+        )
+
+    def to_domain(self, entity: ConfigurationTable) -> Configuration:
+        return Configuration(
+            id=entity.id,
+            key=entity.key,
+            value=entity.value,
         )

@@ -51,3 +51,19 @@ class PropertyOutput(BaseOutput):
     additional_features: list[str]
     location: LocationOutput
     rent_value: float
+
+
+class ConfigurationOutput(BaseOutput):
+    id: str
+    key: str
+    value: list[str]
+
+
+class ConfigurationCreateRequest(BaseCreateRequest):
+    key: str
+    value: list[str]
+
+
+class ConfigurationUpdateRequest(BaseUpdateRequest):
+    key: str | None = None
+    value: list[str] | None = None

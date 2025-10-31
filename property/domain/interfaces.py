@@ -22,19 +22,9 @@ class IBaseRepository(ABC):
         pass
 
 
-class IPropertyRepository(ABC):
-    @abstractmethod
-    async def create(self) -> BaseEntity:
-        pass
+class IPropertyRepository(IBaseRepository):
+    pass
 
-    @abstractmethod
-    async def list(self, filters) -> list[BaseEntity]:
-        pass
 
-    @abstractmethod
-    async def delete(self) -> None:
-        pass
-
-    @abstractmethod
-    async def update(self) -> BaseEntity:
-        pass
+class IConfigurationRepository(IBaseRepository):
+    pass

@@ -2,8 +2,12 @@ from dependency_injector import providers
 from dependency_injector.containers import DeclarativeContainer, WiringConfiguration
 from pydantic_settings import BaseSettings
 
+from property.domain.interfaces import IConfigurationRepository
 from property.domain.interfaces import IPropertyRepository
 from property.infrastructure.postgres.database import DbConnection
+from property.infrastructure.postgres.repositories import (
+    ConfigurationRepositoryPostgres,
+)
 from property.infrastructure.postgres.repositories import PropertyRepositoryPostgres
 
 
@@ -28,9 +32,14 @@ class Container(DeclarativeContainer):
         PropertyRepositoryPostgres, db_connection=db_connection
     )
 
+    configuration_repository = providers.Singleton(
+        ConfigurationRepositoryPostgres, db_connection=db_connection
+    )
+
     repositories = providers.Dict(
         {
             IPropertyRepository: property_repository,
+            IConfigurationRepository: configuration_repository,
         }
     )
 
